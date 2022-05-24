@@ -3,6 +3,7 @@ package at.fhv.sysarch.lab3.pipeline;
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
+import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
 
@@ -13,25 +14,50 @@ public class PushPipelineFactory {
         // TODO: the connection of filters and pipes requires a lot of boilerplate code. Think about options how this can be minimized
         IFilter<Model, Face> source = new ModelSource();
         IFilter<Face, Face> filter = new ModelFilter(pd.getModelTranslation().multiply(pd.getViewTransform()));
-        ModelFilter mv = new ModelFilter(pd.getViewportTransform());
-        ISink<Face> sink = new Renderer(pd.getGraphicsContext(), pd.getRenderingMode());
-        Pipe<Face> pipe = new Pipe<Face>();
-        pipe.setSuccessor(filter);
-        source.setPipeSuccessor(pipe);
-
-        Pipe<Face> toSink = new Pipe<Face>();
-        Pipe<Face> toMv = new Pipe<Face>();
+        Pipe<Face> sourceToFilter = new Pipe<Face>();
+        sourceToFilter.setSuccessor(filter);
+        source.setPipeSuccessor(sourceToFilter);
+        BackfaceFilter bc = new BackfaceFilter();
+        Pipe<Face> filterToBc = new Pipe<Face>();
+        filterToBc.setSuccessor(bc);
+        filter.setPipeSuccessor(filterToBc);
+        ColorFilter cf = new ColorFilter(pd);
+        Pipe<Face> bcToCf = new Pipe<Face>();
+        bcToCf.setSuccessor(cf);
+        bc.setPipeSuccessor(bcToCf);
+        ProjTransformFilter pt = new ProjTransformFilter(pd.getProjTransform());
+        Pipe <Pair<Face, Color>>  cfToPt = new Pipe<Pair<Face,Color>>();
+        cfToPt.setSuccessor(pt);
+        cf.setPipeSuccessor(cfToPt);
+        PerspDivision pdiv = new PerspDivision();
+        Pipe<Pair<Face, Color>>ptToPdiv = new Pipe<Pair<Face, Color>>();
+        ptToPdiv.setSuccessor(pdiv);
+        pt.setPipeSuccessor(ptToPdiv);
+        ProjTransformFilter mv = new ProjTransformFilter(pd.getViewportTransform());
+        Pipe<Pair<Face, Color>> pdivToMv = new Pipe<Pair<Face, Color>>();
+        pdivToMv.setSuccessor(mv);
+        pdiv.setPipeSuccessor(pdivToMv);
+        ISink<Pair<Face,Color>> sink = new Renderer(pd.getGraphicsContext(), pd.getRenderingMode());
+        Pipe<Pair<Face, Color>> toSink = new Pipe<Pair<Face, Color>>();
         toSink.setSuccessor(sink);
-        toMv.setSuccessor(mv);
         mv.setPipeSuccessor(toSink);
+
+
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
 
         // TODO 2. perform backface culling in VIEW SPACE
 
+
+
         // TODO 3. perform depth sorting in VIEW SPACE
+        // not able in PushPipeline
 
         // TODO 4. add coloring (space unimportant)
+
+
+
+
 
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
@@ -42,18 +68,12 @@ public class PushPipelineFactory {
 
         }
 
-        ModelFilter pt = new ModelFilter(pd.getProjTransform());
-        Pipe<Face> toPt = new Pipe<Face>();
-        toPt.setSuccessor(pt);
-        filter.setPipeSuccessor(toPt);
+
+
 
         // TODO 6. perform perspective division to screen coordinates
 
-        PerspDivision perspDivision = new PerspDivision();
-        perspDivision.setPipeSuccessor(toMv);
-        Pipe<Face>toPerspDivision = new Pipe<Face>();
-        pt.setPipeSuccessor(toPerspDivision);
-        toPerspDivision.setSuccessor(perspDivision);
+
 
         // TODO 7. feed into the sink (renderer)
 
