@@ -7,5 +7,6 @@ public interface IFilter<I, O> extends ISink<I> {
 
     void setPipeSuccessor(Pipe<O> pipe);
 
+    void write(I input);
 
 }

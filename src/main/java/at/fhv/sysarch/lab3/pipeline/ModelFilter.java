@@ -19,7 +19,9 @@ public class ModelFilter implements IFilter<Face, Face> {
     private Mat4 Mat;
 
     public void write(Face face) {
-        Face newFace = new Face(Mat.multiply(face.getV1()), Mat.multiply(face.getV2()), Mat.multiply(face.getV3()), Mat.multiply(face.getN1()), Mat.multiply(face.getN2()), Mat.multiply(face.getN3()));
+        Face newFace = new Face(Mat.multiply(face.getV1()), Mat.multiply(face.getV2()),
+                                Mat.multiply(face.getV3()), Mat.multiply(face.getN1()),
+                                Mat.multiply(face.getN2()), Mat.multiply(face.getN3()));
         this.pipeSuccessor.write(newFace);
     }
 

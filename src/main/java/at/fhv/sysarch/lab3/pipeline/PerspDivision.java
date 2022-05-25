@@ -19,3 +19,4 @@ public class PerspDivision implements IFilter<Pair<Face, Color>,Pair<Face, Color
         this.pipeSuccessor.write(new Pair(face, input.snd()));
     }
 }
+
