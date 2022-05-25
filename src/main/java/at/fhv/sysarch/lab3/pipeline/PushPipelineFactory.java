@@ -3,7 +3,11 @@ package at.fhv.sysarch.lab3.pipeline;
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
+import at.fhv.sysarch.lab3.pipeline.Filter.*;
+import at.fhv.sysarch.lab3.pipeline.Push.PushPipe;
+import at.fhv.sysarch.lab3.pipeline.data.ModelSource;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
+import at.fhv.sysarch.lab3.pipeline.data.PipelineData;
 import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
 
@@ -19,13 +23,13 @@ public class PushPipelineFactory {
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
         IFilter<Face, Face> modelFilter = new ModelFilter(pd.getModelTranslation().multiply(pd.getViewTransform()));
-        Pipe<Face> sourceToFilter = new Pipe<Face>();
+        PushPipe<Face> sourceToFilter = new PushPipe<Face>();
         sourceToFilter.setSuccessor(modelFilter);
         source.setPipeSuccessor(sourceToFilter);
 
         // TODO 2. perform backface culling in VIEW SPACE
         BackfaceFilter backfaceFilter = new BackfaceFilter();
-        Pipe<Face> mvToBf = new Pipe<Face>();
+        PushPipe<Face> mvToBf = new PushPipe<Face>();
         mvToBf.setSuccessor(backfaceFilter);
         modelFilter.setPipeSuccessor(mvToBf);
 
@@ -34,10 +38,9 @@ public class PushPipelineFactory {
 
         // TODO 4. add coloring (space unimportant)
         ColorFilter colorFilter = new ColorFilter(pd);
-        Pipe<Face> bfToCf = new Pipe<Face>();
+        PushPipe<Face> bfToCf = new PushPipe<Face>();
         bfToCf.setSuccessor(colorFilter);
         backfaceFilter.setPipeSuccessor(bfToCf);
-
 
 
         // lighting can be switched on/off
@@ -55,14 +58,14 @@ public class PushPipelineFactory {
         }
 
         ProjTransformFilter pt = new ProjTransformFilter(pd.getProjTransform());
-        Pipe<Pair<Face, Color>> cfToPt = new Pipe<Pair<Face, Color>>();
+        PushPipe<Pair<Face, Color>> cfToPt = new PushPipe<Pair<Face, Color>>();
         cfToPt.setSuccessor(pt);
         colorFilter.setPipeSuccessor(cfToPt);
 
 
         // TODO 6. perform perspective division to screen coordinates
         PerspDivision pdiv = new PerspDivision();
-        Pipe<Pair<Face, Color>> ptToPdiv = new Pipe<Pair<Face, Color>>();
+        PushPipe<Pair<Face, Color>> ptToPdiv = new PushPipe<Pair<Face, Color>>();
         ptToPdiv.setSuccessor(pdiv);
         // TODO if isPerformLightning == false then
             pt.setPipeSuccessor(ptToPdiv);
@@ -73,13 +76,13 @@ public class PushPipelineFactory {
 
         // TODO Viewing Transformation - Extra Klasse
         ProjTransformFilter mv = new ProjTransformFilter(pd.getViewportTransform());
-        Pipe<Pair<Face, Color>> pdivToMv = new Pipe<Pair<Face, Color>>();
+        PushPipe<Pair<Face, Color>> pdivToMv = new PushPipe<Pair<Face, Color>>();
         pdivToMv.setSuccessor(mv);
         pdiv.setPipeSuccessor(pdivToMv);
 
         // TODO 7. feed into the sink (renderer)
         ISink<Pair<Face, Color>> modelSink = new Renderer(pd.getGraphicsContext(), pd.getRenderingMode());
-        Pipe<Pair<Face, Color>> toSink = new Pipe<Pair<Face, Color>>();
+        PushPipe<Pair<Face, Color>> toSink = new PushPipe<Pair<Face, Color>>();
         toSink.setSuccessor(modelSink);
         mv.setPipeSuccessor(toSink);
 

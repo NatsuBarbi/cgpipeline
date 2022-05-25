@@ -1,15 +1,17 @@
-package at.fhv.sysarch.lab3.pipeline;
+package at.fhv.sysarch.lab3.pipeline.Filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
+import at.fhv.sysarch.lab3.pipeline.IFilter;
+import at.fhv.sysarch.lab3.pipeline.Push.PushPipe;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import javafx.scene.paint.Color;
 
 public class PerspDivision implements IFilter<Pair<Face, Color>,Pair<Face, Color>> {
 
-    private Pipe<Pair<Face, Color>> pipeSuccessor;
+    private PushPipe<Pair<Face, Color>> pipeSuccessor;
 
     @Override
-    public void setPipeSuccessor(Pipe<Pair<Face,Color>> pipe) {
+    public void setPipeSuccessor(PushPipe<Pair<Face,Color>> pipe) {
         this.pipeSuccessor = pipe;
     }
 

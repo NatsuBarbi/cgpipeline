@@ -1,18 +1,21 @@
-package at.fhv.sysarch.lab3.pipeline;
+package at.fhv.sysarch.lab3.pipeline.Filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
+import at.fhv.sysarch.lab3.pipeline.IFilter;
+import at.fhv.sysarch.lab3.pipeline.Push.PushPipe;
 import com.hackoeur.jglm.Mat4;
 
 public class ModelFilter implements IFilter<Face, Face> {
 
-    private Pipe<Face> pipeSuccessor;
+    private PushPipe<Face> pipeSuccessor;
+    //private PullPipe<Face> pipeSuccessor;
 
     public ModelFilter(Mat4 mat) {
         Mat = mat;
     }
 
 
-    public void setPipeSuccessor(Pipe<Face> pipe) {
+    public void setPipeSuccessor(PushPipe<Face> pipe) {
         this.pipeSuccessor = pipe;
     }
 

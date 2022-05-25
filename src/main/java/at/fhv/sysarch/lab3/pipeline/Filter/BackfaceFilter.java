@@ -1,18 +1,19 @@
-package at.fhv.sysarch.lab3.pipeline;
+package at.fhv.sysarch.lab3.pipeline.Filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import com.hackoeur.jglm.Mat4;
+import at.fhv.sysarch.lab3.pipeline.IFilter;
+import at.fhv.sysarch.lab3.pipeline.Push.PushPipe;
 
 public class BackfaceFilter implements IFilter<Face, Face> {
 
-    private Pipe<Face> pipeSuccessor;
+    private PushPipe<Face> pipeSuccessor;
 
     public BackfaceFilter() {
 
     }
 
 
-    public void setPipeSuccessor(Pipe<Face> pipe) {
+    public void setPipeSuccessor(PushPipe<Face> pipe) {
         this.pipeSuccessor = pipe;
     }
 

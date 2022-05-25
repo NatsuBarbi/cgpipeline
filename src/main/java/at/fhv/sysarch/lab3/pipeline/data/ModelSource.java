@@ -1,13 +1,15 @@
-package at.fhv.sysarch.lab3.pipeline;
+package at.fhv.sysarch.lab3.pipeline.data;
 
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
+import at.fhv.sysarch.lab3.pipeline.IFilter;
+import at.fhv.sysarch.lab3.pipeline.Push.PushPipe;
 
 public class ModelSource implements IFilter<Model, Face> {
 
-    private Pipe<Face> pipeSuccessor;
+    private PushPipe<Face> pipeSuccessor;
 
-    public void setPipeSuccessor(Pipe<Face> pipe) {
+    public void setPipeSuccessor(PushPipe<Face> pipe) {
         this.pipeSuccessor = pipe;
     }
 

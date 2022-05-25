@@ -6,7 +6,7 @@ import java.util.Optional;
 
 import at.fhv.sysarch.lab3.obj.Model;
 import at.fhv.sysarch.lab3.obj.ObjLoader;
-import at.fhv.sysarch.lab3.pipeline.PipelineData;
+import at.fhv.sysarch.lab3.pipeline.data.PipelineData;
 import at.fhv.sysarch.lab3.pipeline.PullPipelineFactory;
 import at.fhv.sysarch.lab3.pipeline.PushPipelineFactory;
 import at.fhv.sysarch.lab3.rendering.RenderingMode;
