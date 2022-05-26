@@ -8,6 +8,8 @@ import at.fhv.sysarch.lab3.pipeline.Push.PushPipe;
 import at.fhv.sysarch.lab3.pipeline.data.ModelSource;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.data.PipelineData;
+import com.hackoeur.jglm.Mat4;
+import com.hackoeur.jglm.Matrices;
 import javafx.animation.AnimationTimer;
 import javafx.scene.paint.Color;
 
@@ -22,7 +24,7 @@ public class PushPipelineFactory {
         IFilter<Model, Face> source = new ModelSource();
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
-        IFilter<Face, Face> modelFilter = new ModelFilter(pd.getModelTranslation().multiply(pd.getViewTransform()));
+        ModelFilter modelFilter = new ModelFilter(pd.getModelTranslation().multiply(pd.getViewTransform()));
         PushPipe<Face> sourceToFilter = new PushPipe<Face>();
         sourceToFilter.setSuccessor(modelFilter);
         source.setPipeSuccessor(sourceToFilter);
@@ -67,11 +69,7 @@ public class PushPipelineFactory {
         PerspDivision pdiv = new PerspDivision();
         PushPipe<Pair<Face, Color>> ptToPdiv = new PushPipe<Pair<Face, Color>>();
         ptToPdiv.setSuccessor(pdiv);
-        // TODO if isPerformLightning == false then
-            pt.setPipeSuccessor(ptToPdiv);
-
-            // TODO else lightningRoute
-            //lt.setPipeSuccessor(ltToPdiv);
+        pt.setPipeSuccessor(ptToPdiv);
 
 
         // TODO Viewing Transformation - Extra Klasse
@@ -100,13 +98,21 @@ public class PushPipelineFactory {
             @Override
             protected void render(float fraction, Model model) {
                 // TODO compute rotation in radians
-
+                pos += fraction;
+                double radians = pos % (2*Math.PI);
                 // TODO create new model rotation matrix using pd.modelRotAxis
-
+                Mat4 rot = Matrices.rotate(
+                        (float) radians,
+                        pd.getModelRotAxis()
+                );
                 // TODO compute updated model-view tranformation
 
-                // TODO update model-view modelFilter
+                modelFilter.setRot(rot);
 
+                // TODO update model-view modelFilter
+                PushPipe<Face> updatePipe = new PushPipe<>();
+                updatePipe.setSuccessor(modelFilter);
+                model.getFaces().forEach(updatePipe::write);
                 // TODO trigger rendering of the pipeline
 
                 // line
@@ -115,7 +121,8 @@ public class PushPipelineFactory {
                 // pos++;
 
                 source.write(model);
-            }
+
+         }
         };
     }
 }

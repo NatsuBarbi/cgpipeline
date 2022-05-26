@@ -11,6 +11,7 @@ public class ProjTransformFilter implements IFilter<Pair<Face, Color>, Pair<Face
 
     private PushPipe<Pair<Face, Color>> pipeSuccessor;
 
+
     public ProjTransformFilter(Mat4 mat) {
         Mat = mat;
     }
@@ -26,5 +27,7 @@ public class ProjTransformFilter implements IFilter<Pair<Face, Color>, Pair<Face
         Face newFace = new Face(Mat.multiply(input.fst().getV1()), Mat.multiply(input.fst().getV2()), Mat.multiply(input.fst().getV3()), Mat.multiply(input.fst().getN1()), Mat.multiply(input.fst().getN2()), Mat.multiply(input.fst().getN3()));
         this.pipeSuccessor.write(new Pair<Face, Color>(newFace, input.snd()));
     }
+
+
 
 }

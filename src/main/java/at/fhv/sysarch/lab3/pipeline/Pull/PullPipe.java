@@ -1,4 +1,4 @@
-package at.fhv.sysarch.lab3.pipeline.Push;
+package at.fhv.sysarch.lab3.pipeline.Pull;
 
 
 import at.fhv.sysarch.lab3.pipeline.ISink;

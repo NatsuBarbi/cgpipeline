@@ -14,18 +14,26 @@ public class ModelFilter implements IFilter<Face, Face> {
         Mat = mat;
     }
 
+    private Mat4 rot;
+
 
     public void setPipeSuccessor(PushPipe<Face> pipe) {
         this.pipeSuccessor = pipe;
     }
 
-    private Mat4 Mat;
+    private final Mat4 Mat;
 
+    public void setRot(Mat4 rot) {
+        this.rot = rot;
+    }
     public void write(Face face) {
-        Face newFace = new Face(Mat.multiply(face.getV1()), Mat.multiply(face.getV2()),
-                                Mat.multiply(face.getV3()), Mat.multiply(face.getN1()),
-                                Mat.multiply(face.getN2()), Mat.multiply(face.getN3()));
+        Mat4 updateMat = Mat.multiply(this.rot);
+        Face newFace = new Face(updateMat.multiply(face.getV1()), updateMat.multiply(face.getV2()),
+                                updateMat.multiply(face.getV3()), updateMat.multiply(face.getN1()),
+                                updateMat.multiply(face.getN2()), updateMat.multiply(face.getN3()));
         this.pipeSuccessor.write(newFace);
     }
+
+
 
 }
