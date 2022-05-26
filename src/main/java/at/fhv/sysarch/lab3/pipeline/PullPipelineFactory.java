@@ -45,6 +45,7 @@ public class PullPipelineFactory {
             LightFilter lightFilter = new LightFilter(pd);
             PullPipe<Pair<Face, Color>> CfToLf = new PullPipe<>(colorFilter);
             lightFilter.getFromPrecessor(CfToLf);
+
             PullPipe<Pair<Face, Color>> LfToPf = new PullPipe<>(lightFilter);
             projFilter.getFromPrecessor(LfToPf);
 

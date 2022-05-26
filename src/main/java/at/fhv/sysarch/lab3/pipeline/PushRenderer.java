@@ -7,12 +7,12 @@ import at.fhv.sysarch.lab3.rendering.RenderingMode;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-public class Renderer implements ISink<Pair<Face, Color>> {
+public class PushRenderer implements ISink<Pair<Face, Color>> {
     private GraphicsContext context;
     private RenderingMode rm;
 
 
-    public Renderer(GraphicsContext context, RenderingMode rm) {
+    public PushRenderer(GraphicsContext context, RenderingMode rm) {
         this.context = context;
         this.rm = rm;
     }

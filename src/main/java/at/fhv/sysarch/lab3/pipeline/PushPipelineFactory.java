@@ -87,7 +87,7 @@ public class PushPipelineFactory {
         pdiv.setPipeSuccessor(pdivToMv);
 
         // TODO 7. feed into the sink (renderer)
-        ISink<Pair<Face, Color>> modelSink = new Renderer(pd.getGraphicsContext(), pd.getRenderingMode());
+        ISink<Pair<Face, Color>> modelSink = new PushRenderer(pd.getGraphicsContext(), pd.getRenderingMode());
         PushPipe<Pair<Face, Color>> toSink = new PushPipe<Pair<Face, Color>>();
         toSink.setSuccessor(modelSink);
         mv.setPipeSuccessor(toSink);

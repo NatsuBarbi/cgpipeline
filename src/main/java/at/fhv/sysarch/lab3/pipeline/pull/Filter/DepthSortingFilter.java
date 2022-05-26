@@ -32,7 +32,7 @@ public class DepthSortingFilter implements IFilterPull<Face, Face> {
         while(pipePrecessor.hasFaces()) {
             sortFace.add(pipePrecessor.read());
         }
-        if (!sortFace.isEmpty()) {
+        if (sortFace.isEmpty()) {
 
             sortFace.sort(Comparator.comparing(face -> face.getV1().getZ() + face.getV2().getZ() + face.getV3().getZ()));
         }
