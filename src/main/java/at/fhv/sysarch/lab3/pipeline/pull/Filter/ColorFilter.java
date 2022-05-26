@@ -17,7 +17,9 @@ public class ColorFilter implements IFilterPull<Pair<Face, Color>, Face> {
         this.pipePrecessor = pipe;
     }
 
-    public boolean hasFaces() { return pipePrecessor.hasFaces(); }
+    public boolean hasFaces() {
+        return pipePrecessor.hasFaces();
+    }
 
     public ColorFilter(PipelineData pd) {
         this.pd = pd;

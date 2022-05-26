@@ -19,6 +19,7 @@ public class BackfaceFilter implements IFilterPull<Face, Face> {
         hasNextFace(); // search for valid Face
         return nextF != null; // if found, we have it.
     }
+
     @Override
     public Face read() {
         hasNextFace();
@@ -31,20 +32,12 @@ public class BackfaceFilter implements IFilterPull<Face, Face> {
         // while we have faces in source, search for valid face
         // valid face is a face that is not "behind" the view space
         // check one face, if not valid, try next face till source is empty
-        while(pipePrecessor.hasFaces() && nextF == null) {
+        while (pipePrecessor.hasFaces() && nextF == null) {
             Face source = pipePrecessor.read();
-            if(source.getV1().dot(source.getN1()) < 0) {
+            if (source.getV1().dot(source.getN1()) < 0) {
                 // valid face found
                 nextF = source;
             }
         }
     }
-
-
-    // Todo Edits Barbi
-
-
-
-
-
 }

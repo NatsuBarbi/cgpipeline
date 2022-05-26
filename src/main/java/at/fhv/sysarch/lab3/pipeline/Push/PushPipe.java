@@ -1,17 +1,15 @@
 package at.fhv.sysarch.lab3.pipeline.Push;
 
 
-// TODO: how can pipes be used for different data types?
-public class PushPipe<T> implements ISink<T> {
+public class PushPipe<T> implements IPushPipe<T> {
 
-    private ISink<T> successor;
+    private IPushPipe<T> successor;
 
-    public void setSuccessor(ISink<T> sink) {
+    public void setSuccessor(IPushPipe<T> sink) {
         this.successor = sink;
     }
 
     public void write(T face) {
         this.successor.write(face);
     }
-
 }

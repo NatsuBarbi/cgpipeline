@@ -1,8 +1,6 @@
 package at.fhv.sysarch.lab3.pipeline.pull.Filter;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import at.fhv.sysarch.lab3.pipeline.Push.IFilter;
-import at.fhv.sysarch.lab3.pipeline.Push.PushPipe;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.pull.IFilterPull;
 import at.fhv.sysarch.lab3.pipeline.pull.PullPipe;

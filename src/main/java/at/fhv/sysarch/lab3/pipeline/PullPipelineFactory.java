@@ -3,11 +3,9 @@ package at.fhv.sysarch.lab3.pipeline;
 import at.fhv.sysarch.lab3.animation.AnimationRenderer;
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
-import at.fhv.sysarch.lab3.pipeline.Push.PushPipe;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
 import at.fhv.sysarch.lab3.pipeline.pull.Filter.*;
 import at.fhv.sysarch.lab3.pipeline.data.PipelineData;
-import at.fhv.sysarch.lab3.pipeline.pull.IPullPipe;
 import at.fhv.sysarch.lab3.pipeline.pull.PullPipe;
 import at.fhv.sysarch.lab3.pipeline.pull.PullSource;
 import com.hackoeur.jglm.Mat4;
@@ -20,14 +18,17 @@ public class PullPipelineFactory {
     public static AnimationTimer createPipeline(PipelineData pd) {
         // TODO: pull from the source (model)
         PullSource source = new PullSource();
+
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
         ModelFilter modelFilter = new ModelFilter(pd.getModelTranslation().multiply(pd.getViewTransform()));
         PullPipe<Face> srcToMVP = new PullPipe<>(source);
         modelFilter.getFromPrecessor(srcToMVP);
+
         // TODO 2. perform backface culling in VIEW SPACE
         BackfaceFilter backfaceFilter = new BackfaceFilter();
         PullPipe<Face> MvpToBf = new PullPipe<>(modelFilter);
         backfaceFilter.getFromPrecessor(MvpToBf);
+
         // TODO 3. perform depth sorting in VIEW SPACE
         DepthSortingFilter depthSortFilter = new DepthSortingFilter();
         PullPipe<Face> BfToDs = new PullPipe<>(backfaceFilter);
@@ -62,11 +63,12 @@ public class PullPipelineFactory {
         ProjTransformFilter mv = new ProjTransformFilter(pd.getViewportTransform());
         PullPipe<Pair<Face, Color>> PdivToMv = new PullPipe<>(pdiv);
         mv.getFromPrecessor(PdivToMv);
-        // TODO 7. feed into the sink (renderer)
 
+        // TODO 7. feed into the sink (renderer)
         PullRenderer renderer = new PullRenderer(pd.getGraphicsContext(), pd.getRenderingMode());
         PullPipe<Pair<Face, Color>> MvToRenderer = new PullPipe<>(mv);
         renderer.getFromPrecessor(MvToRenderer);
+
         // returning an animation renderer which handles clearing of the
         // viewport and computation of the praction
         return new AnimationRenderer(pd) {
@@ -81,27 +83,21 @@ public class PullPipelineFactory {
             @Override
             protected void render(float fraction, Model model) {
                 // TODO compute rotation in radians
-                 pos += fraction;
-                 double radians = pos % (2*Math.PI);
-                 // TODO create new model rotation matrix using pd.modelRotAxis
-                 Mat4 rot = Matrices.rotate(
-                 (float) radians,
-                 pd.getModelRotAxis()
-                 );
-                 // TODO compute updated model-view tranformation
+                pos += fraction;
+                double radians = pos % (2 * Math.PI);
+                // TODO create new model rotation matrix using pd.modelRotAxis
+                Mat4 rot = Matrices.rotate(
+                        (float) radians,
+                        pd.getModelRotAxis()
+                );
+                // TODO compute updated model-view tranformation
 
-                 modelFilter.setRot(rot);
+                modelFilter.setRot(rot);
 
                 // TODO update model-view modelFilter
+                source.setSource(model.getFaces());
 
                 // TODO trigger rendering of the pipeline
-
-                // line
-                // pd.getGraphicsContext().setStroke(Color.PINK);
-                // pd.getGraphicsContext().strokeLine(0 + pos, 0 + pos, 100 + pos, 100 + pos);
-                // pos++;
-
-                source.setSource(model.getFaces());
                 renderer.read();
             }
         };

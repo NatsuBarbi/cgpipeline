@@ -1,11 +1,9 @@
-package at.fhv.sysarch.lab3.pipeline.data;
+package at.fhv.sysarch.lab3.pipeline.Push;
 
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
-import at.fhv.sysarch.lab3.pipeline.Push.IFilter;
-import at.fhv.sysarch.lab3.pipeline.Push.PushPipe;
 
-public class ModelSource implements IFilter<Model, Face> {
+public class PushSource implements IFilterPush<Model, Face> {
 
     private PushPipe<Face> pipeSuccessor;
 
@@ -14,8 +12,7 @@ public class ModelSource implements IFilter<Model, Face> {
     }
 
     public void write(Model model) {
-        for(Face face : model.getFaces()){
-            // TODO: write face to next filter
+        for (Face face : model.getFaces()) {
             pipeSuccessor.write(face);
         }
     }

@@ -1,9 +1,7 @@
 package at.fhv.sysarch.lab3.pipeline;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import at.fhv.sysarch.lab3.pipeline.Push.ISink;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
-import at.fhv.sysarch.lab3.pipeline.pull.IFilterPull;
 import at.fhv.sysarch.lab3.pipeline.pull.IPullPipe;
 import at.fhv.sysarch.lab3.pipeline.pull.PullPipe;
 import at.fhv.sysarch.lab3.rendering.RenderingMode;
@@ -21,16 +19,13 @@ public class PullRenderer implements IPullPipe<Pair<Face, Color>> {
         this.rm = rm;
     }
 
-    public void getFromPrecessor(PullPipe<Pair<Face,Color>> pipe) {
+    public void getFromPrecessor(PullPipe<Pair<Face, Color>> pipe) {
         this.pipePrecessor = pipe;
     }
 
-
-
-
     public Pair<Face, Color> read() {
 
-        while(pipePrecessor.hasFaces()) {
+        while (pipePrecessor.hasFaces()) {
             Pair<Face, Color> input = pipePrecessor.read();
 
             Color color = input.snd();
@@ -50,6 +45,8 @@ public class PullRenderer implements IPullPipe<Pair<Face, Color>> {
             } else if (rm == RenderingMode.FILLED) {
                 context.strokePolygon(cordX, cordY, 3);
                 context.fillPolygon(cordX, cordY, 3);
-        }}
+            }
+        }
         return null;
-    }}
+    }
+}

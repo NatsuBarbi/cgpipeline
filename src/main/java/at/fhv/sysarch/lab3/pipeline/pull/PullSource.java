@@ -1,14 +1,14 @@
 package at.fhv.sysarch.lab3.pipeline.pull;
 
 import at.fhv.sysarch.lab3.obj.Face;
-import at.fhv.sysarch.lab3.obj.Model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PullSource implements IFilterPull<Face, Face> {
 
-    public PullSource() {}
+    public PullSource() {
+    }
 
     private List<Face> facesList = new ArrayList<>();
 
@@ -26,9 +26,7 @@ public class PullSource implements IFilterPull<Face, Face> {
         return this.facesList.remove(0);
     }
 
-    public void setSource (List<Face> list) {
+    public void setSource(List<Face> list) {
         this.facesList.addAll(list);
     }
-
-
 }
