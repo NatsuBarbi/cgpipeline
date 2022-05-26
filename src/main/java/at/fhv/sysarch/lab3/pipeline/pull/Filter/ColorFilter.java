@@ -29,5 +29,4 @@ public class ColorFilter implements IFilterPull<Pair<Face, Color>, Face> {
         Pair<Face, Color> pair = new Pair<>(face, pd.getModelColor());
         return pair;
     }
-
 }

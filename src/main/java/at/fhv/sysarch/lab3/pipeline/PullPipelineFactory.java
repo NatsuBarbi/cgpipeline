@@ -34,7 +34,9 @@ public class PullPipelineFactory {
         ColorFilter colorFilter = new ColorFilter(pd);
         PullPipe<Face> BfToCf = new PullPipe<>(backfaceFilter);
         colorFilter.getFromPrecessor(BfToCf);
+
         ProjTransformFilter projFilter = new ProjTransformFilter(pd.getProjTransform());
+
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
             LightFilter lightFilter = new LightFilter(pd);
@@ -66,6 +68,7 @@ public class PullPipelineFactory {
         return new AnimationRenderer(pd) {
             // TODO rotation variable goes in here
             float pos = 0f;
+
             /** This method is called for every frame from the JavaFX Animation
              * system (using an AnimationTimer, see AnimationRenderer).
              * @param fraction the time which has passed since the last render call in a fraction of a second
@@ -74,16 +77,16 @@ public class PullPipelineFactory {
             @Override
             protected void render(float fraction, Model model) {
                 // TODO compute rotation in radians
-               /** pos += fraction;
-                double radians = pos % (2*Math.PI);
-                // TODO create new model rotation matrix using pd.modelRotAxis
-                Mat4 rot = Matrices.rotate(
-                        (float) radians,
-                        pd.getModelRotAxis()
-                );
-                // TODO compute updated model-view tranformation
+                /** pos += fraction;
+                 double radians = pos % (2*Math.PI);
+                 // TODO create new model rotation matrix using pd.modelRotAxis
+                 Mat4 rot = Matrices.rotate(
+                 (float) radians,
+                 pd.getModelRotAxis()
+                 );
+                 // TODO compute updated model-view tranformation
 
-                modelFilter.setRot(rot);**/
+                 modelFilter.setRot(rot);**/
 
                 // TODO update model-view modelFilter
 
