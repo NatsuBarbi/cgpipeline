@@ -35,10 +35,6 @@ public class PullRenderer implements IPullPipe<Pair<Face, Color>> {
 
             Color color = input.snd();
 
-
-
-
-
             double[] cordX = new double[]{input.fst().getV1().getX(), input.fst().getV2().getX(), input.fst().getV3().getX()};
             double[] cordY = new double[]{input.fst().getV1().getY(), input.fst().getV2().getY(), input.fst().getV3().getY()};
 
@@ -54,12 +50,6 @@ public class PullRenderer implements IPullPipe<Pair<Face, Color>> {
             } else if (rm == RenderingMode.FILLED) {
                 context.strokePolygon(cordX, cordY, 3);
                 context.fillPolygon(cordX, cordY, 3);
-                /**
-                context.fillPolygon(new double[]{input.fst().getV1().getX(), input.fst().getV2().getX(), input.fst().getV3().getX()}, new double[]{input.fst().getV1().getY(), input.fst().getV2().getY(), input.fst().getV3().getY()}, new double[]{input.fst().getV1().getX(), input.fst().getV2().getX(), input.fst().getV3().getX()}.length);
-                context.strokeLine(input.fst().getV1().getX() * factor, input.fst().getV1().getY() * factor, input.fst().getV2().getX() * factor, input.fst().getV2().getY() * factor);
-                context.strokeLine(input.fst().getV1().getX() * factor, input.fst().getV1().getY() * factor, input.fst().getV3().getX() * factor, input.fst().getV3().getY() * factor);
-                context.strokeLine(input.fst().getV2().getX() * factor, input.fst().getV2().getY() * factor, input.fst().getV3().getX() * factor, input.fst().getV3().getY() * factor);
-            } **/
         }}
         return null;
     }}
