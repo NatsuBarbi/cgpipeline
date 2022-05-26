@@ -4,6 +4,8 @@ import at.fhv.sysarch.lab3.animation.AnimationRenderer;
 import at.fhv.sysarch.lab3.obj.Face;
 import at.fhv.sysarch.lab3.obj.Model;
 import at.fhv.sysarch.lab3.pipeline.Filter.*;
+import at.fhv.sysarch.lab3.pipeline.Push.IFilter;
+import at.fhv.sysarch.lab3.pipeline.Push.ISink;
 import at.fhv.sysarch.lab3.pipeline.Push.PushPipe;
 import at.fhv.sysarch.lab3.pipeline.data.ModelSource;
 import at.fhv.sysarch.lab3.pipeline.data.Pair;
@@ -46,23 +48,29 @@ public class PushPipelineFactory {
 
 
         // lighting can be switched on/off
+        ProjTransformFilter pt = new ProjTransformFilter(pd.getProjTransform());
 
         if (pd.isPerformLighting()) {
             // 4a. TODO perform lighting in VIEW SPACE
-            /* Punkte Produkt von 2 normalisierten Vektoren < 0 = Schwarz
+            LightFilter lf = new LightFilter(pd);
+            PushPipe<Pair<Face, Color>> cfToLf = new PushPipe<Pair<Face, Color>>();
+            cfToLf.setSuccessor(lf);
+            colorFilter.setPipeSuccessor(cfToLf);
 
-             */
+            PushPipe<Pair<Face, Color>> lfToPt = new PushPipe<>();
+            lfToPt.setSuccessor(pt);
+            lf.setPipeSuccessor(lfToPt);
 
 
             // 5. TODO perform projection transformation on VIEW SPACE coordinates
         } else {
-
+            PushPipe<Pair<Face, Color>> cfToPt = new PushPipe<Pair<Face, Color>>();
+            cfToPt.setSuccessor(pt);
+            colorFilter.setPipeSuccessor(cfToPt);
         }
 
-        ProjTransformFilter pt = new ProjTransformFilter(pd.getProjTransform());
-        PushPipe<Pair<Face, Color>> cfToPt = new PushPipe<Pair<Face, Color>>();
-        cfToPt.setSuccessor(pt);
-        colorFilter.setPipeSuccessor(cfToPt);
+
+
 
 
         // TODO 6. perform perspective division to screen coordinates
@@ -88,7 +96,7 @@ public class PushPipelineFactory {
         // viewport and computation of the praction
         return new AnimationRenderer(pd) {
             // TODO rotation variable goes in here
-            private int pos = 0;
+            float pos = 0f;
 
             /** This method is called for every frame from the JavaFX Animation
              * system (using an AnimationTimer, see AnimationRenderer).

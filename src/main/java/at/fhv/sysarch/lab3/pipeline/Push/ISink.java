@@ -1,4 +1,4 @@
-package at.fhv.sysarch.lab3.pipeline;
+package at.fhv.sysarch.lab3.pipeline.Push;
 
 public interface ISink<I> {
 

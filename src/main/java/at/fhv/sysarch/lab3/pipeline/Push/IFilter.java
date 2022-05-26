@@ -1,6 +1,4 @@
-package at.fhv.sysarch.lab3.pipeline;
-
-import at.fhv.sysarch.lab3.pipeline.Push.PushPipe;
+package at.fhv.sysarch.lab3.pipeline.Push;
 
 // TODO: Think about how generics can be applied in this context
 // TODO: The current solution is JUST an illustration and not sufficient for the example. It only shows how generics may be used.

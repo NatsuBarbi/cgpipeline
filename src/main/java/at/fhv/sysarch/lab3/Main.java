@@ -26,8 +26,8 @@ public class Main extends Application {
     private final static int SCENE_WIDTH  = VIEW_WIDTH * 2;
     private final static int SCENE_HEIGHT = VIEW_HEIGHT * 2;
 
-    private final static boolean USE_PUSH_PIPELINE = true;
-    
+    private final static boolean USE_PUSH_PIPELINE = false;
+
     @Override
     public void start(Stage stage) throws IOException {
         File f = new File("resources/teapot.obj");
@@ -35,7 +35,7 @@ public class Main extends Application {
 
         Group root = new Group();
         Scene s = new Scene(root, SCENE_WIDTH, SCENE_HEIGHT, Color.BLACK);
-        
+
         final Canvas c1 = new Canvas(VIEW_WIDTH, VIEW_HEIGHT);
         final Canvas c2 = new Canvas(VIEW_WIDTH, VIEW_HEIGHT);
         final Canvas c3 = new Canvas(VIEW_WIDTH, VIEW_HEIGHT);
