@@ -21,53 +21,53 @@ public class PullPipelineFactory {
 
         // TODO 1. perform model-view transformation from model to VIEW SPACE coordinates
         ModelFilter modelFilter = new ModelFilter(pd.getModelTranslation().multiply(pd.getViewTransform()));
-        PullPipe<Face> srcToMVP = new PullPipe<>(source);
-        modelFilter.getFromPrecessor(srcToMVP);
+        PullPipe<Face> sourceToModelFilter = new PullPipe<>(source);
+        modelFilter.getFromPrecessor(sourceToModelFilter);
 
         // TODO 2. perform backface culling in VIEW SPACE
         BackfaceFilter backfaceFilter = new BackfaceFilter();
-        PullPipe<Face> MvpToBf = new PullPipe<>(modelFilter);
-        backfaceFilter.getFromPrecessor(MvpToBf);
+        PullPipe<Face> modelFilterToBackfaceFilter = new PullPipe<>(modelFilter);
+        backfaceFilter.getFromPrecessor(modelFilterToBackfaceFilter);
 
         // TODO 3. perform depth sorting in VIEW SPACE
         DepthSortingFilter depthSortFilter = new DepthSortingFilter();
-        PullPipe<Face> BfToDs = new PullPipe<>(backfaceFilter);
-        depthSortFilter.getFromPrecessor(BfToDs);
+        PullPipe<Face> backfaceFilterToDepthSortingFilter = new PullPipe<>(backfaceFilter);
+        depthSortFilter.getFromPrecessor(backfaceFilterToDepthSortingFilter);
 
         // TODO 4. add coloring (space unimportant)
         ColorFilter colorFilter = new ColorFilter(pd);
-        PullPipe<Face> DsToCf = new PullPipe<>(depthSortFilter);
-        colorFilter.getFromPrecessor(DsToCf);
+        PullPipe<Face> depthSortingFilterToColorFilter = new PullPipe<>(depthSortFilter);
+        colorFilter.getFromPrecessor(depthSortingFilterToColorFilter);
 
-        ProjTransformFilter projFilter = new ProjTransformFilter(pd.getProjTransform());
+        ProjTransformFilter projectTransformFilter = new ProjTransformFilter(pd.getProjTransform());
 
         // lighting can be switched on/off
         if (pd.isPerformLighting()) {
-            LightFilter lightFilter = new LightFilter(pd);
-            PullPipe<Pair<Face, Color>> CfToLf = new PullPipe<>(colorFilter);
-            lightFilter.getFromPrecessor(CfToLf);
+            LightFilter lightningFilter = new LightFilter(pd);
+            PullPipe<Pair<Face, Color>> colorFilterTolightningFilter = new PullPipe<>(colorFilter);
+            lightningFilter.getFromPrecessor(colorFilterTolightningFilter);
 
-            PullPipe<Pair<Face, Color>> LfToPf = new PullPipe<>(lightFilter);
-            projFilter.getFromPrecessor(LfToPf);
+            PullPipe<Pair<Face, Color>> lightningFilterToProjectTransformFilter = new PullPipe<>(lightningFilter);
+            projectTransformFilter.getFromPrecessor(lightningFilterToProjectTransformFilter);
 
         } else {
-            PullPipe<Pair<Face, Color>> CfToPf = new PullPipe<>(colorFilter);
-            projFilter.getFromPrecessor(CfToPf);
+            PullPipe<Pair<Face, Color>> colorFilterToProjectTransformFilter = new PullPipe<>(colorFilter);
+            projectTransformFilter.getFromPrecessor(colorFilterToProjectTransformFilter);
         }
 
         // TODO 6. perform perspective division to screen coordinates
-        PerspDivision pdiv = new PerspDivision();
-        PullPipe<Pair<Face, Color>> PfToPdiv = new PullPipe<>(projFilter);
-        pdiv.getFromPrecessor(PfToPdiv);
+        PerspDivision perspectiveDivisionFilter = new PerspDivision();
+        PullPipe<Pair<Face, Color>> projectTransformFilterToPerspectiveDivisionFilter = new PullPipe<>(projectTransformFilter);
+        perspectiveDivisionFilter.getFromPrecessor(projectTransformFilterToPerspectiveDivisionFilter);
 
-        ProjTransformFilter mv = new ProjTransformFilter(pd.getViewportTransform());
-        PullPipe<Pair<Face, Color>> PdivToMv = new PullPipe<>(pdiv);
-        mv.getFromPrecessor(PdivToMv);
+        ProjTransformFilter modelView = new ProjTransformFilter(pd.getViewportTransform());
+        PullPipe<Pair<Face, Color>> perspectiveDivisionFilterToModelView = new PullPipe<>(perspectiveDivisionFilter);
+        modelView.getFromPrecessor(perspectiveDivisionFilterToModelView);
 
         // TODO 7. feed into the sink (renderer)
         PullRenderer renderer = new PullRenderer(pd.getGraphicsContext(), pd.getRenderingMode());
-        PullPipe<Pair<Face, Color>> MvToRenderer = new PullPipe<>(mv);
-        renderer.getFromPrecessor(MvToRenderer);
+        PullPipe<Pair<Face, Color>> modelViewToRenderer = new PullPipe<>(modelView);
+        renderer.getFromPrecessor(modelViewToRenderer);
 
         // returning an animation renderer which handles clearing of the
         // viewport and computation of the praction
@@ -82,12 +82,12 @@ public class PullPipelineFactory {
              */
             @Override
             protected void render(float fraction, Model model) {
-                // TODO compute rotation in radians
+                // TODO compute rotation in radiant
                 pos += fraction;
-                double radians = pos % (2 * Math.PI);
+                double radiant = pos % (2 * Math.PI);
                 // TODO create new model rotation matrix using pd.modelRotAxis
                 Mat4 rot = Matrices.rotate(
-                        (float) radians,
+                        (float) radiant,
                         pd.getModelRotAxis()
                 );
                 // TODO compute updated model-view tranformation
