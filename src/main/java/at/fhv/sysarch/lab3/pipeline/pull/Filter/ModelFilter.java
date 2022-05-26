@@ -27,7 +27,7 @@ public class ModelFilter implements IFilterPull<Face, Face> {
     }
     public Face read() {
         Face face = pipePrecessor.read();
-        Mat4 updateMat = Mat; //.multiply(this.rot);
+        Mat4 updateMat = Mat.multiply(this.rot);
         Face newFace = new Face(updateMat.multiply(face.getV1()), updateMat.multiply(face.getV2()),
                                 updateMat.multiply(face.getV3()), updateMat.multiply(face.getN1()),
                                 updateMat.multiply(face.getN2()), updateMat.multiply(face.getN3()));

@@ -77,7 +77,7 @@ public class PullPipelineFactory {
             @Override
             protected void render(float fraction, Model model) {
                 // TODO compute rotation in radians
-                /** pos += fraction;
+                 pos += fraction;
                  double radians = pos % (2*Math.PI);
                  // TODO create new model rotation matrix using pd.modelRotAxis
                  Mat4 rot = Matrices.rotate(
@@ -86,7 +86,7 @@ public class PullPipelineFactory {
                  );
                  // TODO compute updated model-view tranformation
 
-                 modelFilter.setRot(rot);**/
+                 modelFilter.setRot(rot);
 
                 // TODO update model-view modelFilter
 
