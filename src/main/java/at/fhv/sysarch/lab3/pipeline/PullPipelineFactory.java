@@ -29,7 +29,6 @@ public class PullPipelineFactory {
         PullPipe<Face> MvpToBf = new PullPipe<>(modelFilter);
         backfaceFilter.getFromPrecessor(MvpToBf);
         // TODO 3. perform depth sorting in VIEW SPACE
-
         DepthSortingFilter depthSortFilter = new DepthSortingFilter();
         PullPipe<Face> BfToDs = new PullPipe<>(backfaceFilter);
         depthSortFilter.getFromPrecessor(BfToDs);
