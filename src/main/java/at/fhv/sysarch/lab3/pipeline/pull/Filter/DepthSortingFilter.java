@@ -24,18 +24,16 @@ public class DepthSortingFilter implements IFilterPull<Face, Face> {
 
     @Override
     public Face read() {
+
+        if(pipePrecessor.hasFaces() && sortFace.isEmpty()) {
+            while (pipePrecessor.hasFaces()) {
+                sortFace.add(pipePrecessor.read());
+            }
+            sortFace.sort(Comparator.comparing(face -> face.getV1().getZ() + face.getV2().getZ() + face.getV3().getZ()));
+        }
         return sortFace.removeFirst();
     }
 
     @Override
-    public boolean hasFaces() {
-        while(pipePrecessor.hasFaces()) {
-            sortFace.add(pipePrecessor.read());
-        }
-        if (sortFace.isEmpty()) {
-
-            sortFace.sort(Comparator.comparing(face -> face.getV1().getZ() + face.getV2().getZ() + face.getV3().getZ()));
-        }
-        return !sortFace.isEmpty();
-    }
+    public boolean hasFaces() { return pipePrecessor.hasFaces(); }
 }

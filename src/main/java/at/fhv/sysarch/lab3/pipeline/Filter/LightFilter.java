@@ -26,11 +26,8 @@ public class LightFilter implements IFilter<Pair<Face, Color>, Pair<Face,Color>>
     public void write(Pair<Face, Color> input) {
        Face face = input.fst();
        float product = face.getN1().toVec3().dot(pd.getLightPos().getUnitVector());
-       if (product > 0) {
+
            this.pipeSuccessor.write(new Pair<>(face, input.snd().deriveColor(0,1, product,1)));
-       } else {
-           this.pipeSuccessor.write(new Pair<>(face, Color.BLACK));
-       }
     }
 
 
