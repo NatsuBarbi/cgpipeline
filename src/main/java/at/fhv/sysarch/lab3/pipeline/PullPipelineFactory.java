@@ -30,10 +30,14 @@ public class PullPipelineFactory {
         backfaceFilter.getFromPrecessor(MvpToBf);
         // TODO 3. perform depth sorting in VIEW SPACE
 
+        DepthSortingFilter depthSortFilter = new DepthSortingFilter();
+        PullPipe<Face> BfToDs = new PullPipe<>(backfaceFilter);
+        depthSortFilter.getFromPrecessor(BfToDs);
+
         // TODO 4. add coloring (space unimportant)
         ColorFilter colorFilter = new ColorFilter(pd);
-        PullPipe<Face> BfToCf = new PullPipe<>(backfaceFilter);
-        colorFilter.getFromPrecessor(BfToCf);
+        PullPipe<Face> DsToCf = new PullPipe<>(depthSortFilter);
+        colorFilter.getFromPrecessor(DsToCf);
 
         ProjTransformFilter projFilter = new ProjTransformFilter(pd.getProjTransform());
 
